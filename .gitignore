@@ -1,0 +1,7 @@
+#python enviroment
+/pyvenv
+
+/mysql/database/*
+
+**/__pycache__
+**/migrations
