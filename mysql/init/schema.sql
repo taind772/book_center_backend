@@ -12,7 +12,7 @@ CREATE TABLE `documents` (
   `isbn` char(10),
   `language` ENUM ('english', 'vietnamese', 'other') NOT NULL,
   `path_to_file` varchar(255) NOT NULL,
-  `type` ENUM ('book', 'arctile', 'slide', 'test') NOT NULL
+  `category` ENUM ('book', 'arctile', 'slide', 'test') NOT NULL
 );
 
 CREATE TABLE `document_author` (
@@ -33,7 +33,7 @@ CREATE TABLE `publishers` (
 );
 
 CREATE TABLE `users` (
-  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int PRIMARY KEY AUTO_INCREMENT,
   `uname` varchar(255) UNIQUE NOT NULL,
   `email` varchar(255) UNIQUE NOT NULL,
   `md5_pass` varchar(255) NOT NULL
@@ -94,13 +94,13 @@ ALTER TABLE `document_author` ADD FOREIGN KEY (`author_id`) REFERENCES `authors`
 
 ALTER TABLE `bookmarks` ADD FOREIGN KEY (`document_id`) REFERENCES `documents` (`doc_id`);
 
-ALTER TABLE `bookmarks` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `bookmarks` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
-ALTER TABLE `uploaded` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `uploaded` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 ALTER TABLE `uploaded` ADD FOREIGN KEY (`document_id`) REFERENCES `documents` (`doc_id`);
 
-ALTER TABLE `rates` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `rates` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 ALTER TABLE `rates` ADD FOREIGN KEY (`document_id`) REFERENCES `documents` (`doc_id`);
 

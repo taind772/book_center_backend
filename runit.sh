@@ -8,6 +8,7 @@ rm -rf ./app/*/migrations
 #remove test database, command it in deploy
 
 rm -rf ./mysql/database
+rm -rf ./app/*DB
 
 #clean docker -- just for me, dont uncommand them if u have any other docker data
 
@@ -16,4 +17,4 @@ rm -rf ./mysql/database
 # docker system prune -f
 # docker image rm backend_app
 
-docker-compose up
+docker-compose up --build

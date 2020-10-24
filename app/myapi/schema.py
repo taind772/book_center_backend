@@ -24,7 +24,7 @@ class DocumentAuthorType(DjangoObjectType):
 class DocumentsType(DjangoObjectType):
   class Meta:
     model = Documents
-    fields = ("title", "description", "publisher", "release_year", "isbn", "language", "path_to_file", "kind")
+    fields = ("title", "description", "publisher", "release_year", "isbn", "language", "path_to_file", "category")
 
 
 class MajorSubjectType(DjangoObjectType):
@@ -92,6 +92,9 @@ class Query(graphene.ObjectType):
   #
   bookmarks_by_user = graphene.Field(BookmarksType, user=graphene.Int())
   def resolve_bookmarks_by_user(root, info, user):
-    return Bookmarks.objects.get(user=user)
+    try:
+      return Bookmarks.objects.get(user=user)
+    except Bookmarks.DoesNotExist:
+      return None
 
 schema = graphene.Schema(query=Query)

@@ -32,7 +32,7 @@ class Bookmarks(models.Model):
 class DocumentAuthor(models.Model):
     document = models.ForeignKey('Documents', models.DO_NOTHING)
     author = models.ForeignKey(Authors, models.DO_NOTHING)
-    last_update = models.DateTimeField()
+    last_update = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -40,9 +40,11 @@ class DocumentAuthor(models.Model):
         unique_together = (('document', 'author'),)
 
 
+LANG_CHOICES = [(_, _) for _ in ('vietnamese', 'english', 'other')]
+CATEGORY_CHOICES = [(_, _) for _ in ('book', 'article', 'slide', 'test')]
+
+
 class Documents(models.Model):
-    LANG_CHOICES = [(_, _) for _ in ('vietnamese', 'english', 'other')]
-    TYPE_CHOICES = [(_, _) for _ in ('book', 'article', 'slide', 'test')]
     doc_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -51,7 +53,7 @@ class Documents(models.Model):
     isbn = models.CharField(max_length=10, blank=True, null=True)
     language = models.CharField(max_length=10, choices=LANG_CHOICES)
     path_to_file = models.CharField(max_length=255)
-    kind = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    category = models.CharField(max_length=7, choices=CATEGORY_CHOICES)
 
     class Meta:
         managed = False
@@ -133,7 +135,7 @@ class Uploaded(models.Model):
     uploaded_id = models.AutoField(primary_key=True)
     user = models.ForeignKey('Users', models.DO_NOTHING)
     document = models.ForeignKey(Documents, models.DO_NOTHING)
-    upload_time = models.DateTimeField()
+    upload_time = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -142,6 +144,7 @@ class Uploaded(models.Model):
 
 
 class Users(models.Model):
+    user_id = models.AutoField(primary_key=True)
     uname = models.CharField(unique=True, max_length=255)
     email = models.CharField(unique=True, max_length=255)
     md5_pass = models.CharField(max_length=255)
