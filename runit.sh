@@ -1,16 +1,16 @@
 #!/bin/sh
 
-#clean cache, command it in deploy
+#clean cache, comment it in deploy
 
 rm -rf ./app/*/__pycache__
 rm -rf ./app/*/migrations
 
-#remove test database, command it in deploy
+#remove test database, comment it in deploy
 
 rm -rf ./mysql/database
 rm -rf ./app/*DB
 
-#clean docker -- just for me, dont uncommand them if u have any other docker data
+#clean docker -- just for me, dont uncomment them if u have any other docker data
 
 # docker container prune -f
 # docker volume prune -f

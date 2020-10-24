@@ -16,5 +16,5 @@
 ### Resource:
 * [Django](https://docs.djangoproject.com/)
 * [Graphql](https://graphql.org/) - [graphene for django](https://docs.graphene-python.org/projects/django/en/latest/)
-* 3rd opensource scripts:
+* Opensource scripts:
   * [wait-for-it.sh](https://github.com/vishnubob/wait-for-it)
