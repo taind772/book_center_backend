@@ -51,7 +51,7 @@ class Documents(models.Model):
     isbn = models.CharField(max_length=10, blank=True, null=True)
     language = models.CharField(max_length=10, choices=LANG_CHOICES)
     path_to_file = models.CharField(max_length=255)
-    type = models.CharField(max_length=7, choices=TYPE_CHOICES)
+    kind = models.CharField(max_length=7, choices=TYPE_CHOICES)
 
     class Meta:
         managed = False
