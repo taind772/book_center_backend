@@ -33,5 +33,5 @@ services:
       - ./mysql/init:/docker-entrypoint-initdb.d
       - ./mysql/database:/var/lib/mysql
     ports: 
-      - "${MYSQL_FORWARD_PORT}:3306"
+      - "${MYSQL_FORWARD_PORT}:${MYSQL_HOST_PORT}"
     
