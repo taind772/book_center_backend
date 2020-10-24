@@ -7,7 +7,7 @@ rm -rf ./app/*/migrations
 
 #remove test database, command it in deploy
 
-rm -rf ./mysql/database/*
+rm -rf ./mysql/database
 
 #clean docker -- just for me, dont uncommand them if u have any other docker data
 
