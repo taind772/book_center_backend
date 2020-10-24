@@ -5,3 +5,5 @@
 
 **/__pycache__
 **/migrations
+
+runit.sh
