@@ -13,7 +13,7 @@ def clean():
 
 def run():
   # Clean docker data - dont uncomment this line if u dont know what it for
-  os.system("docker system prune -f")
+  # os.system("docker system prune -f")
   os.system("docker-compose up --build")
 
 if __name__ == "__main__":

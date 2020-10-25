@@ -49,7 +49,7 @@ class Documents(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     publisher = models.ForeignKey('Publishers', models.DO_NOTHING, blank=True, null=True)
-    release_year = models.TextField(blank=True, null=True)  # This field type is a guess.
+    release_year = models.IntegerField(blank=True, null=True)  # This field type is a guess.
     isbn = models.CharField(max_length=10, blank=True, null=True)
     language = models.CharField(max_length=10, choices=LANG_CHOICES)
     path_to_file = models.CharField(max_length=255)
