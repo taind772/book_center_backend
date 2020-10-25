@@ -4,16 +4,15 @@
 ### Run and manage app:
 * ? [config port]: [```./.env```](./.env)
 * Build app:
-  - Linux: just run [```./runit.sh```](./runit.sh)
-  - Window: something like ```docker-compose up```
+  ```python runit.py```
 * Manager:
   - app: ```docker exec -it ${DOCKER_APP_CONTAINER} sh```
   - mysql: ```docker exec -it ${DOCKER_MYSQL_CONTAINER} mysql -u${MYSQL_USER} -p{MYSQL_PASS}```
-* Available site:
-  - admin: ```localhost:${APP_PORT}\admin``` default [(username,pass) = ("admin","admin")](./scripts/startserver.sh)
+* Available sites:
+  - admin: ```localhost:${APP_PORT}\admin``` default [(username,pass) = ("admin","djangotestpw")](./scripts/startserver.sh)
   - graphql: ```localhost:${APP_PORT}\graphql```
 
-### Resource:
+### Resources:
 * [Django](https://docs.djangoproject.com/)
 * [Graphql](https://graphql.org/) - [graphene for django](https://docs.graphene-python.org/projects/django/en/latest/)
 * Opensource scripts:
