@@ -7,20 +7,20 @@ services:
     env_file: 
       - .env
     ports: 
-      - "${APP_PORT}:8000"
+      - "${APP_HOST_PORT}:${APP_FOWARD_PORT}"
     volumes: 
       - ./app:/app
     command: >
       bash -c "/scripts/wait-for-it.sh mysql:${MYSQL_FORWARD_PORT} -t 0 
       && /scripts/startserver.sh
-      && python manage.py runserver 0.0.0.0:${APP_PORT}"
+      && python manage.py runserver 0.0.0.0:${APP_FOWARD_PORT}"
     environment: 
       - DEBUG=1
     depends_on: 
       - mysql
 
   mysql:
-    image: mysql:8
+    image: mariadb
     restart: always
     env_file: 
       - .env
@@ -29,6 +29,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_INITDB_SKIP_TZINFO: 1
     volumes: 
       - ./mysql/init:/docker-entrypoint-initdb.d
       - ./mysql/database:/var/lib/mysql
