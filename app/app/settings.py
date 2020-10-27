@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # own apps
-    'myapi',
+    'document',
+    # 'myapi',
 ]
 
 MIDDLEWARE = [
@@ -88,7 +89,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'innerDB',
+        'NAME': 'inner.db',
     },
     'db': {
         'ENGINE': 'django.db.backends.mysql',
@@ -150,7 +151,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 GRAPHENE = {
-    "SCHEMA": "myapi.schema.schema"
+    "SCHEMA": "document.api.schema"
 }
 
 CORS_ORIGIN_WHITELIST = [

@@ -3,7 +3,8 @@
 
 /mysql/database/*
 
-**/__pycache__
-**/migrations
+__pycache__
+*.pyc
+*.db
 
-innerDB
+.log
