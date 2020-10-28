@@ -1,5 +1,10 @@
 Query: title=None,language=None, category=None
-ResultL document.Document.objectsQuery: title=None,language=None, category=None
-ResultL document.Document.objectsQuery: title=None,language=None, category=None
-ResultL document.Document.objectsQuery: title=None,language=None, category=None
-ResultL <QuerySet []>
+Result: document.Document.objects
+Query: title=None,language=None, category=None
+Result: document.Document.objects
+Query: title=None,language=None, category=None
+Result: document.Document.objects
+Query: title=None,language=None, category=None
+Result: document.Document.objects
+Query: title=None,language=None, category=None
+Result: document.Document.objects

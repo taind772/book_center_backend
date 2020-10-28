@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
     # own apps
     'document',
-    # 'myapi',
+    'author',
 ]
 
 MIDDLEWARE = [
@@ -151,7 +151,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 GRAPHENE = {
-    "SCHEMA": "document.api.schema"
+    "SCHEMA": "app.schema.schema"
 }
 
 CORS_ORIGIN_WHITELIST = [

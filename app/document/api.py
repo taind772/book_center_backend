@@ -1,10 +1,9 @@
-# from .services import DocumentServices
 import graphene
 from .services import DocumentServices
 
 
 class DocumentType(graphene.ObjectType):
-  uuid = graphene.UUID()
+  document_uuid = graphene.UUID()
   title = graphene.String()
   description = graphene.String()
   release_year = graphene.Int()
@@ -75,4 +74,4 @@ class Query(graphene.ObjectType):
 #   add_document = AddDocument.Field()
 
 
-schema = graphene.Schema(query=Query)
+# schema = graphene.Schema(query=Query)
