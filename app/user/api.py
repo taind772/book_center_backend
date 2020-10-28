@@ -26,7 +26,29 @@ class Query(graphene.ObjectType):
   def resolve_user_by_username(root, info,
     username: graphene.String()
     )->graphene.Field:
-    try:
-      return UserServices.get(username=username)
-    except:
-      return None
+    return UserServices.get_by_username(username=username)
+
+
+class CreateUser(graphene.Mutation):
+  class Arguments:
+    username = graphene.String()
+    email = graphene.String()
+    password = graphene.String()
+  
+  user = graphene.Field(UserType)
+  
+  def mutate(self, info,
+    username: graphene.String(),
+    password: graphene.String(),
+    email: graphene.String()
+    )->graphene.Boolean:
+    return CreateUser(
+      user=UserServices.create_user(
+        username=username, 
+        email=email, 
+        password=password
+        ))
+
+
+class Mutation(graphene.ObjectType):
+  create_user = CreateUser.Field()

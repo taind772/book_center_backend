@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # own apps
     'document',
     'author',
+    'user'
 ]
 
 MIDDLEWARE = [

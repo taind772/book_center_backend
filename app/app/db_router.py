@@ -1,4 +1,4 @@
-DATA_MODELS = ['document', 'author']
+DATA_MODELS = ['document', 'author', 'user']
 
 class Router:
     def db_for_read(self, model, **hints):
