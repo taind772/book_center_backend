@@ -8,32 +8,42 @@ TMP = ['./app/**/__pycache__', './app/*.db', './mysql/database', ',/app/**/migra
 
 
 def clean():
+  print('Cleaning temp file...')
   for path in TMP:
     for _ in glob.glob(path, recursive=True):
       if _.endswith("__init__.py"):
         continue
       os.remove(_) if os.path.isfile(_) else shutil.rmtree(_, ignore_errors=True)
+  print('Finish clean tmp!')
 
 
 def clean_docker():
+  print('Cleaning docker file...')
   os.system("docker system prune -f")
+  print('Finish cleaning docker!')
 
 
 def build():
   # os.system("sudo systemctl start docker")
+  print('Building compose...')
   stop()
   clean()
   clean_docker()
   os.system("docker-compose up -d --build")
+  print('Finish buiding!')
   exec_to_app()
 
 
 def stop():
+  print('Stopping docker containers...')
   os.system("docker stop $(docker ps -aq)")
+  print('Finish stopping!')
 
 
 def restart():
+  print('Restarting docker containers...')
   os.system("docker restart $(docker ps -aq)")
+  print('Finish restarting!')
 
 
 def exec_to_app():
@@ -45,9 +55,11 @@ def exec_to_mysql():
 
 
 def clean_all():
+  print('Cleaning everything...')
   stop()
   clean()
   os.system("docker system prune -af")
+  print('Finish cleaning all!')
 
 
 if __name__ == "__main__":
