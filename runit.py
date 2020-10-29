@@ -4,7 +4,7 @@ import os
 import shutil
 import glob
 
-TMP = ['./app/**/__pycache__', './app/*.db', './mysql/database', ',/app/**/migrations/*']
+TMP = ['./app/**/__pycache__/*', './app/*.db', './mysql/database/*', './app/**/migrations/*']
 
 
 def clean():
@@ -13,7 +13,12 @@ def clean():
     for _ in glob.glob(path, recursive=True):
       if _.endswith("__init__.py"):
         continue
-      os.remove(_) if os.path.isfile(_) else shutil.rmtree(_, ignore_errors=True)
+      if os.path.isfile(_):
+        print(f'remove {_}')
+        os.remove(_)
+      else:
+        print(f'remove {_}')
+        shutil.rmtree(_)
   print('Finish clean tmp!')
 
 
@@ -29,9 +34,13 @@ def build():
   stop()
   clean()
   clean_docker()
-  os.system("docker-compose up -d --build")
-  print('Finish buiding!')
-  exec_to_app()
+  debug = input('Debug? y=Yes, other=No: ')
+  if debug == 'y':
+    os.system("docker-compose up --build")
+  else:
+    os.system("docker-compose up -d --build ")
+    exec_to_app()
+  print('\nFinish task!')
 
 
 def stop():
@@ -62,10 +71,15 @@ def clean_all():
   print('Finish cleaning all!')
 
 
+def shell():
+  os.system("sh")
+
+
 if __name__ == "__main__":
   i = 0
   while i != 9:
     i = int(input("Things this script can do:\
+      \n0. Shell command\
       \n1. Build docker-compose (stop, clean docker and exec to app by default)\
       \n2. Clean temp data (Stop all docker containers by default)\
       \n3. Clean docker (containers, volumes but not pulled images)\
@@ -76,8 +90,9 @@ if __name__ == "__main__":
       \n8. Clean all\
       \n9. Exit\
       \nWhat do you want?: "))
-    os.system("clear")
-    if i == 1:
+    if i == 0:
+      shell()
+    elif i == 1:
       build()
     elif i == 2:
       clean()
@@ -93,5 +108,5 @@ if __name__ == "__main__":
       exec_to_mysql()
     elif i == 8:
       clean_all()
-    print(f'task done!\n{"_" * 40}')
+    print("_" * 60)
   print('Bye!')
