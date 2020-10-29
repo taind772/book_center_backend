@@ -75,10 +75,10 @@ def shell():
   os.system("sh")
 
 
-if __name__ == "__main__":
-  i = 0
-  while i != 9:
-    i = int(input("Things this script can do:\
+def get_wish()->int:
+  val = None
+  try:
+    val = int(input("Things this script can do:\
       \n0. Shell command\
       \n1. Build docker-compose (stop, clean docker and exec to app by default)\
       \n2. Clean temp data (Stop all docker containers by default)\
@@ -90,23 +90,33 @@ if __name__ == "__main__":
       \n8. Clean all\
       \n9. Exit\
       \nWhat do you want?: "))
-    if i == 0:
-      shell()
-    elif i == 1:
-      build()
-    elif i == 2:
-      clean()
-    elif i == 3:
-      clean_docker()
-    elif i == 4:
-      stop()
-    elif i == 5:
-      restart()
-    elif i == 6:
-      exec_to_app()
-    elif i == 7:
-      exec_to_mysql()
-    elif i == 8:
-      clean_all()
+  except:
+    while val is None or val not in range(10):
+      try:
+        val = int(input("Invalid input, please choose again"))
+      except:
+        val = None
+  return val
+
+
+wish_dict = {
+  0: shell,
+  1: build,
+  2: clean,
+  3: clean_docker,
+  4: stop,
+  5: restart,
+  6: exec_to_app,
+  7: exec_to_mysql,
+  8: clean_all,
+  9: lambda: None
+}
+
+
+if __name__ == "__main__":
+  i = -1
+  while i != 9:
+    i = get_wish()
+    wish_dict[i]()
     print("_" * 60)
   print('Bye!')
