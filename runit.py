@@ -75,7 +75,21 @@ def shell():
   os.system("sh")
 
 
-def get_wish()->int:
+wish_dict = {
+  0: shell,
+  1: build,
+  2: clean,
+  3: clean_docker,
+  4: stop,
+  5: restart,
+  6: exec_to_app,
+  7: exec_to_mysql,
+  8: clean_all,
+  9: lambda: None
+}
+
+
+def wish()->bool:
   val = None
   try:
     val = int(input("Things this script can do:\
@@ -96,27 +110,11 @@ def get_wish()->int:
         val = int(input("Invalid input, please choose again"))
       except:
         val = None
-  return val
-
-
-wish_dict = {
-  0: shell,
-  1: build,
-  2: clean,
-  3: clean_docker,
-  4: stop,
-  5: restart,
-  6: exec_to_app,
-  7: exec_to_mysql,
-  8: clean_all,
-  9: lambda: None
-}
+  wish_dict[val]()
+  return val != 9
 
 
 if __name__ == "__main__":
-  i = -1
-  while i != 9:
-    i = get_wish()
-    wish_dict[i]()
+  while wish():
     print("_" * 60)
   print('Bye!')
