@@ -1,77 +1,46 @@
 import graphene
-from .services import DocumentServices
+from . import services as DocumentServices
 
 
 class DocumentType(graphene.ObjectType):
-  document_uuid = graphene.UUID()
-  title = graphene.String()
-  description = graphene.String()
-  release_year = graphene.Int()
-  language = graphene.String()
-  category = graphene.String()
-  last_update = graphene.DateTime()
+    document_uuid = graphene.UUID()
+    title = graphene.String()
+    description = graphene.String()
+    release_year = graphene.Int()
+    language = graphene.String()
+    category = graphene.String()
+    last_update = graphene.DateTime()
+    authors_name = graphene.String()
+    upload_by = graphene.String()
 
 
 class Query(graphene.ObjectType):
+    #
+    document_by_uuid = graphene.Field(DocumentType, uuid=graphene.UUID(required=True))
 
-  document_by_uuid = graphene.Field(DocumentType, uuid=graphene.UUID())
+    @staticmethod
+    def resolve_document_by_uuid(self, info, uuid: graphene.UUID()):
+        return DocumentServices.document_by_uuid(document_uuid=uuid)
 
-  def resolve_document_by_uuid(root, info, 
-    uuid: graphene.UUID()
-    )->graphene.Field:
-    try:
-      return DocumentServices.get(uuid=uuid)
-    except:
-      None
-  #
-  document_filter = graphene.List(
-    DocumentType,
-    title=graphene.String(),
-    release_year=graphene.Int(),
-    language=graphene.String(),
-    category=graphene.String()
-    )
+    #
+    document_filter = graphene.List(
+        DocumentType,
+        title=graphene.String(),
+        release_year=graphene.Int(),
+        language=graphene.String(),
+        category=graphene.String())
 
-  def resolve_document_filter(root, info,
-    title=None,
-    release_year=None,
-    language=None,
-    category=None
-    )->graphene.List:
-    return DocumentServices.filter(
-      title=title,
-      release_year=release_year,
-      language=language,
-      category=category
-    )
+    @staticmethod
+    def resolve_document_filter(self, info, title=None, release_year=None, language=None, category=None):
+        return DocumentServices.document_filter(
+            title=title,
+            release_year=release_year,
+            language=language,
+            category=category)
 
-
-
-# class AddDocument(graphene.Mutation):
-#   class Arguments:
-#     title = graphene.String(required=True)
-#     description = graphene.String()
-#     release_year = graphene.Int()
-#     language = graphene.Enum()
-#     category = graphene.Enum()
-  
-#   # document = graphene.Field(DocumentsType)
-#   ok = graphene.Boolean()
-
-#   def mutate(self, info, title, category, language, description=None, release_year=None):
-#     return AddDocument(
-#       ok=DocumentServices.create_document(
-#         title=title,
-#         description=description,
-#         release_year=release_year,
-#         language=language,
-#         category=category
-#       )
-#     )
-
-
-# class Mutation(graphene.ObjectType):
-#   add_document = AddDocument.Field()
-
-
-# schema = graphene.Schema(query=Query)
+    # document_get_author = graphene.List(graphene.ObjectType, document_uuid=graphene.UUID())
+    #
+    # @staticmethod
+    # def resolve_document_get_author(self, info, document_uuid: graphene.UUID()):
+    #     author_uuid_list = DocumentAuthorMap.get_authors_uuid(document_uuid=document_uuid)
+    #     return AuthorServices.author_get_all(author_uuid_list=author_uuid_list)

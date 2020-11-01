@@ -107,7 +107,7 @@ def wish()->bool:
   except:
     while val is None or val not in range(10):
       try:
-        val = int(input("Invalid input, please choose again"))
+        val = int(input("Invalid input, please choose again: "))
       except:
         val = None
   wish_dict[val]()

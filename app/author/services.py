@@ -1,20 +1,23 @@
 import uuid
 from .models import Author
 
-class AuthorServices():
 
-  @staticmethod
-  def filter(*, name: str)->Author:
-    return Author.objects.get(name=name)
-
-  @staticmethod
-  def get(*, uuid: uuid.UUID)->Author:
-    return Author.objects.get(author_uuid=uuid)
-
-  @staticmethod
-  def create(*, name: str, description: str)->bool:
+def author_by_name(name: str):
     try:
-      Author.objects.create(name=name, description=description)
-      return True
-    except:
-      return False
+        return Author.objects.get(name=name)
+    except Author.DoesNotExist:
+        return None
+
+
+def author_get(author_uuid: uuid.UUID):
+    return Author.objects.get(author_uuid=author_uuid)
+
+
+def author_create(author_name: str):
+    return Author.objects.create(name=author_name)
+
+
+def author_get_all(author_uuid_list=None):
+    if author_uuid_list is None:
+        return Author.objects.all()
+    return Author.objects.filter(author_uuid__in=author_uuid_list)

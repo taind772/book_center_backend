@@ -2,29 +2,50 @@ import uuid
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 
-# Create your models here.
 
-class User(models.Model):
-  user_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-  username = models.CharField(unique=True, max_length=40)
-  email = models.EmailField(unique=True, max_length=255)
-  hash_pass = models.CharField(max_length=255)
-  last_update = models.DateTimeField(auto_now_add=True)
+class UserManager(BaseUserManager):
+    def user_create(self, username: str, email: str, password: str):
+        for val, name in ((username, 'username'), (email, 'email'), (password, 'password')):
+            if val is None:
+                raise ValueError(f'The given {val} must be set')
+        email = self.normalize_email(email)
+        username = self.model.normalize_username(username)
+        user = self.model(username=username, email=email)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-  class Meta:
-    db_table = 'user'
-
-class VipUser(AbstractBaseUser):
-  user_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-  username = models.CharField(unique=True, max_length=40)
-  email = models.EmailField(unique=True, max_length=255)
-  _password = models.CharField(max_length=100)
-  # password = default
-  USERNAME_FIELD = 'username'
-
-  class Meta:
-    db_table = 'vip_user'
+    def user_delete(self, user_uuid: str):
+        try:
+            user = self.get(user_uuid=user_uuid)
+            user.delete()
+            return "The user was deleted"
+        except User.DoesNotExist:
+            raise ValueError(f'User does not exist')
 
 
-class VipUserManager(BaseUserManager):
-  pass
+class User(AbstractBaseUser):
+    user_uuid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
+    username = models.CharField(
+        unique=True,
+        max_length=40,
+        null=False,
+        blank=False)
+    email = models.EmailField(
+        unique=True,
+        max_length=255,
+        null=True,
+        blank=True)
+    join_date = models.DateField(auto_now=True)
+
+    class Meta:
+        db_table = 'user'
+
+    objects = UserManager()
+    USERNAME_FIELD = 'username'
+
+    def __str__(self):
+        return self.username

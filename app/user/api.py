@@ -1,54 +1,44 @@
 import graphene
-from .services import UserServices
+from . import services as  UserServices
 
 
 class UserType(graphene.ObjectType):
-  user_uuid = graphene.UUID()
-  username = graphene.String()
-  email = graphene.String()
-  last_update = graphene.DateTime()
+	username = graphene.String()
+	join_date = graphene.DateTime()
 
 
-class Query(graphene.ObjectType):
-  #
-  user_by_uuid = graphene.Field(UserType, uuid=graphene.UUID())
-  
-  def resolve_user_by_uuid(root, info, 
-    uuid: graphene.UUID()
-    )->graphene.Field:
-    try:
-      return UserServices.get(uuid=uuid)
-    except:
-      return None
-  #
-  user_by_username = graphene.Field(UserType, username=graphene.String())
+class UserCreate(graphene.Mutation):
+	class Arguments:
+		username = graphene.String(required=True)
+		email = graphene.String(required=True)
+		password = graphene.String(required=True)
 
-  def resolve_user_by_username(root, info,
-    username: graphene.String()
-    )->graphene.Field:
-    return UserServices.get_by_username(username=username)
+	ok = graphene.Boolean()
 
-
-class CreateUser(graphene.Mutation):
-  class Arguments:
-    username = graphene.String()
-    email = graphene.String()
-    password = graphene.String()
-  
-  user = graphene.Field(UserType)
-  
-  def mutate(self, info,
-    username: graphene.String(),
-    password: graphene.String(),
-    email: graphene.String()
-    )->graphene.Boolean:
-    return CreateUser(
-      user=UserServices.create_user(
-        username=username, 
-        email=email, 
-        password=password
-        ))
+	@staticmethod
+	def mutate(self, info, username, password, email):
+		return UserCreate(
+			ok=UserServices.user_create(
+				username=username,
+				email=email,
+				password=password))
 
 
 class Mutation(graphene.ObjectType):
-  create_user = CreateUser.Field()
+	user_create = UserCreate.Field()
+
+
+class Query(graphene.ObjectType):
+	#
+	user_by_username = graphene.Field(UserType, username=graphene.String(required=True))
+
+	@staticmethod
+	def resolve_user_by_username(self, info, username):
+		return UserServices.user_by_username(username=username)
+
+	#
+	user_get = graphene.Field(UserType)
+
+	@staticmethod
+	def resolve_user_get(self, info):
+		return UserServices.user_get(info=info)

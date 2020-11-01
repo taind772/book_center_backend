@@ -12,7 +12,6 @@ services:
       - ./app:/app
     command: >
       bash -c "/scripts/wait-for-it.sh mysql:${MYSQL_FORWARD_PORT} -t 0 
-      && /scripts/config-django.sh
       && tail -f /dev/null"
     environment: 
       - DEBUG=1

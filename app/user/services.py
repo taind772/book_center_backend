@@ -2,25 +2,24 @@ import uuid
 from .models import User
 
 
-class UserServices():
-  # 
-  @staticmethod
-  def get_by_uuid(*,
-    uuid: uuid.UUID
-    )->User:
-    return User.objects.get(user_id=uuid)
-  # 
-  @staticmethod
-  def get_by_username(*,
-    username: str
-    )->User:
+def user_by_uuid(user_uuid: uuid.UUID) -> User:
+    return User.objects.get(user_uuid=user_uuid)
+
+
+def user_by_username(username: str) -> User:
     return User.objects.get(username=username)
-  # 
-  @staticmethod
-  def create_user(*,
-    username: str,
-    email: str,
-    password: str
-    )->User:
-    return User.objects.create(username=username, email=email, hash_pass=hash(password))
-  # 
+
+
+def user_create(username: str, email: str, password: str) -> bool:
+    user = User.objects.user_create(
+            username=username,
+            email=email,
+            password=password)
+    return user is not None
+
+
+def user_get(info):
+    user = info.context.user
+    if user.is_anonymous:
+        raise Exception('Not logged in!')
+    return user

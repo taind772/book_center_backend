@@ -2,50 +2,40 @@ import uuid
 from .models import Document
 
 
-class DocumentServices():
+def document_create(
+		title: str,
+		description: str,
+		release_year: int,
+		language: str,
+		category: str,
+		authors_name: str):
+	return Document.objects.create(
+		title=title,
+		description=description,
+		release_year=release_year,
+		language=language,
+		category=category,
+		authors_name=authors_name)
 
-  @staticmethod
-  def get(*,
-    uuid: uuid.UUID
-    )->Document:
-    return Document.objects.get(document_uuid=uuid)
 
-  @staticmethod
-  def filter(*,
-    title: str,
-    release_year: int,
-    language: str,
-    category: str
-    )->Document.objects:
-    result = Document.objects
-    if title is not None:
-      result = result.filter(title=title)
-    if release_year is not None:
-      result = result.filter(release_year=release_year)
-    if language is not None:
-      result = result.filter(language=language)
-    if category is not None:
-      result = result.filter(category=category)
-    with open('log/document-filter.log', 'a') as log:
-      log.write(f'Query: title={title},language={language}, category={category}\nResult: {result}\n')
-    return result.all()
-  
-  @staticmethod
-  def create_document(*,
-    title: str,
-    description: str,
-    release_year: int,
-    language: str,
-    category: str
-  )->bool:
-    try:
-      document = Document.objects.create(
-        title=title,
-        description=description,
-        release_year=release_year,
-        category=category,
-        language=language
-      )
-      return True
-    except:
-      return False
+def document_by_uuid(document_uuid: uuid.UUID) -> Document:
+	return Document.objects.get(document_uuid=document_uuid)
+
+
+def document_get_all(document_uuid_list=None):
+	if document_uuid_list is None:
+		return Document.objects.all()
+	return Document.objects.filter(document_uuid__in=document_uuid_list)
+
+
+def document_filter(title: str, release_year: int, language: str, category: str):
+	result = Document.objects
+	if title is not None:
+		result = result.filter(title=title)
+	if release_year is not None:
+		result = result.filter(release_year=release_year)
+	if language is not None:
+		result = result.filter(language=language)
+	if category is not None:
+		result = result.filter(category=category)
+	return result.all()
