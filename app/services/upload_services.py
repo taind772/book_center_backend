@@ -21,7 +21,8 @@ def upload(info,
         release_year=release_year,
         language=language,
         category=category,
-        authors_name=authors_name)
+        authors_name=authors_name,
+        uploader=user.username)
     if authors_name is not None:
         for a_name in authors_name.split(','):
             author = AuthorServices.author_by_name(name=a_name)

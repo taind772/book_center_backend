@@ -8,14 +8,16 @@ def document_create(
 		release_year: int,
 		language: str,
 		category: str,
-		authors_name: str):
+		authors_name: str,
+		uploader: str):
 	return Document.objects.create(
 		title=title,
 		description=description,
 		release_year=release_year,
 		language=language,
 		category=category,
-		authors_name=authors_name)
+		authors_name=authors_name,
+		upload_by=uploader)
 
 
 def document_by_uuid(document_uuid: uuid.UUID) -> Document:
