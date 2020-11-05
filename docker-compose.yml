@@ -7,7 +7,7 @@ services:
     env_file: 
       - .env
     ports: 
-      - "${APP_HOST_PORT}:${APP_FOWARD_PORT}"
+      - "${APP_HOST_PORT}:${APP_FORWARD_PORT}"
     volumes: 
       - ./app:/app
     command: >

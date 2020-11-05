@@ -1,8 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
-
 class Bookmark(models.Model):
     user_uuid = models.UUIDField(null=False, blank=False)
     document_uuid = models.UUIDField(null=False, blank=False)
@@ -35,15 +33,4 @@ class Rate(models.Model):
         db_table = 'rates'
         constraints = [
             models.UniqueConstraint(fields=['user_uuid', 'document_uuid'], name='rate')
-        ]
-
-
-class DocumentAuthor(models.Model):
-    document_uuid = models.UUIDField(null=False, blank=False)
-    author_uuid = models.UUIDField(null=False, blank=False)
-
-    class Meta:
-        db_table = 'document_author'
-        constraints = [
-            models.UniqueConstraint(fields=['document_uuid', 'author_uuid'], name='authors_of_documents')
         ]

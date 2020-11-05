@@ -1,5 +1,5 @@
 import graphene
-from . import services as  UserServices
+from . import services as UserServices
 
 
 class UserType(graphene.ObjectType):
@@ -17,11 +17,12 @@ class UserCreate(graphene.Mutation):
 
 	@staticmethod
 	def mutate(self, info, username, password, email):
-		return UserCreate(
-			ok=UserServices.user_create(
+		user = UserServices.user_create(
 				username=username,
 				email=email,
-				password=password))
+				password=password)
+		ok = user is not None
+		return UserCreate(ok=ok)
 
 
 class Mutation(graphene.ObjectType):

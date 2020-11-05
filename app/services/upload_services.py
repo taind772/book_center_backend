@@ -1,9 +1,11 @@
 import uuid
-from .models import Upload
+
 import user.services as UserServices
 import document.services as DocumentServices
-import author.services as AuthorServices
-from . import document_author as DocumentAuthorMap
+from groups.services import AuthorServices, LabelServices, PublisherServices
+
+from .models import Upload
+from maps.services import DocumentAuthorMap, DocumentPublisherMap, LabelDocumentMap
 
 
 def upload(info,
@@ -12,8 +14,10 @@ def upload(info,
            release_year: int,
            language: str,
            category: str,
-           authors_name: str
-           ) -> bool:
+           authors_name: str,
+           publishers: str,
+           labels: str
+           ) -> Upload:
     user = UserServices.user_get(info=info)
     document = DocumentServices.document_create(
         title=title,
@@ -21,20 +25,28 @@ def upload(info,
         release_year=release_year,
         language=language,
         category=category,
-        authors_name=authors_name,
         uploader=user.username)
+    if publishers is not None:
+        for p_name in publishers.split(','):
+            p = PublisherServices.get_or_create(name=p_name)
+            DocumentPublisherMap.dp_create(
+                document_uuid=document.document_uuid,
+                publisher_uuid=p.id)
     if authors_name is not None:
         for a_name in authors_name.split(','):
-            author = AuthorServices.author_by_name(name=a_name)
-            if author is None:
-                author = AuthorServices.author_create(author_name=a_name)
-            DocumentAuthorMap.create(
+            a = AuthorServices.get_or_create(name=a_name)
+            DocumentAuthorMap.da_create(
                 document_uuid=document.document_uuid,
-                author_uuid=author.author_uuid)
-    Upload.objects.create(
+                author_uuid=a.id)
+    if labels is not None:
+        for lb_name in labels.split(','):
+            lb = LabelServices.get_or_create(name=lb_name)
+            LabelDocumentMap.ld_create(
+                document_uuid=document.document_uuid,
+                label_uuid=lb.id)
+    return Upload.objects.create(
         user_uuid=user.user_uuid,
         document_uuid=document.document_uuid)
-    return True
 
 
 # def remove(*, info, document_uuid: str)->bool:
@@ -42,11 +54,12 @@ def upload(info,
 #   owner = Upload.objects.get()
 
 
-def get_uploader(document_uuid: uuid.uuid4):
-    uploader_uuid = Upload.objects.get(document_uuid=document_uuid).user_uuid
-    return UserServices.user_by_uuid(user_uuid=uploader_uuid)
+def upload_get_uploader(document_uuid: uuid.uuid4):
+    user_uuid = Upload.objects.get(document_uuid=document_uuid).user_uuid
+    return UserServices.user_by_uuid(user_uuid=user_uuid)
 
 
 def upload_by_me(info):
     user = UserServices.user_get(info=info)
-    return Upload.objects.filter(user_uuid=user.user_uuid)
+    document_uuid_list = Upload.objects.filter(user_uuid=user.user_uuid).values_list('document_uuid', flat=True)
+    return DocumentServices.document_get_all(document_uuid_list=document_uuid_list)

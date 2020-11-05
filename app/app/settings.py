@@ -47,9 +47,10 @@ INSTALLED_APPS = [
 
     # own apps
     'document',
-    'author',
     'user',
-    'services'
+    'services',
+    'groups',
+    'maps',
 ]
 
 MIDDLEWARE = [
@@ -90,31 +91,70 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': 'inner.db',
-    # },
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': os.environ.get('MYSQL_HOST'),
-        'PORT': os.environ.get('MYSQL_FORWARD_PORT'),
-        'OPTIONS': {
-            # Tell MySQLdb to connect with 'utf8mb4' character set
-            'charset': 'utf8mb4',
-        },
-        # Tell Django to build the test database with the 'utf8mb4' character set
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
-        }
-    }
-}
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': 'inner.db',
+#     # },
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('MYSQL_DATABASE'),
+#         'USER': os.environ.get('MYSQL_USER'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+#         'HOST': os.environ.get('MYSQL_HOST'),
+#         'PORT': os.environ.get('MYSQL_FORWARD_PORT'),
+#         'OPTIONS': {
+#             # Tell MySQLdb to connect with 'utf8mb4' character set
+#             'charset': 'utf8mb4',
+#         },
+#         # Tell Django to build the test database with the 'utf8mb4' character set
+#         'TEST': {
+#             'CHARSET': 'utf8mb4',
+#             'COLLATION': 'utf8mb4_unicode_ci',
+#         }
+#     }
+# }
 
 # DATABASE_ROUTERS=['app.db_router.Router']
+
+if os.environ.get('ENV') == 'docker':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('MYSQL_DATABASE'),
+            'USER': os.environ.get('MYSQL_USER'),
+            'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+            'HOST': os.environ.get('MYSQL_HOST'),
+            'PORT': os.environ.get('MYSQL_FORWARD_PORT'),
+            'OPTIONS': {
+                # Tell MySQLdb to connect with 'utf8mb4' character set
+                'charset': 'utf8mb4',
+            },
+            # Tell Django to build the test database with the 'utf8mb4' character set
+            'TEST': {
+                'CHARSET': 'utf8mb4',
+                'COLLATION': 'utf8mb4_unicode_ci',
+            }
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'test-db',
+            'USER': 'djangoTest',
+            'PASSWORD': 'testpw',
+            'OPTIONS': {
+                # Tell MySQLdb to connect with 'utf8mb4' character set
+                'charset': 'utf8mb4',
+            },
+            # Tell Django to build the test database with the 'utf8mb4' character set
+            'TEST': {
+                'CHARSET': 'utf8mb4',
+                'COLLATION': 'utf8mb4_unicode_ci',
+            }
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

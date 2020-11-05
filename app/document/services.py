@@ -8,7 +8,6 @@ def document_create(
 		release_year: int,
 		language: str,
 		category: str,
-		authors_name: str,
 		uploader: str):
 	return Document.objects.create(
 		title=title,
@@ -16,7 +15,6 @@ def document_create(
 		release_year=release_year,
 		language=language,
 		category=category,
-		authors_name=authors_name,
 		upload_by=uploader)
 
 

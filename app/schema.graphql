@@ -1,0 +1,79 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type AuthorType {
+  authorUuid: UUID
+  name: String
+  description: String
+  lastUpdate: DateTime
+}
+
+scalar DateTime
+
+type DocumentType {
+  documentUuid: UUID
+  title: String
+  description: String
+  releaseYear: Int
+  language: String
+  category: String
+  lastUpdate: DateTime
+  authorsName: String
+  uploadBy: String
+}
+
+scalar GenericScalar
+
+type Mutation {
+  documentUpload(authorsName: String, category: String!, description: String, language: String!, releaseYear: Int, title: String!): UploadDocument
+  userCreate(email: String!, password: String!, username: String!): UserCreate
+  tokenAuth(username: String!, password: String!): ObtainJSONWebToken
+  verifyToken(token: String): Verify
+  refreshToken(token: String): Refresh
+}
+
+type ObtainJSONWebToken {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+type Query {
+  bookmarkGet: [DocumentType]
+  bookmarkCreate(documentUuid: UUID): Boolean
+  bookmarkCheck(documentUuid: UUID): Boolean
+  bookmarkDelete(documentUuid: UUID): Boolean
+  uploadGet: [DocumentType]
+  userByUsername(username: String!): UserType
+  userGet: UserType
+  authorByName(name: String!): AuthorType
+  documentByUuid(uuid: UUID!): DocumentType
+  documentFilter(title: String, releaseYear: Int, language: String, category: String): [DocumentType]
+}
+
+type Refresh {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+scalar UUID
+
+type UploadDocument {
+  ok: Boolean
+}
+
+type UserCreate {
+  ok: Boolean
+}
+
+type UserType {
+  username: String
+  joinDate: DateTime
+}
+
+type Verify {
+  payload: GenericScalar!
+}
