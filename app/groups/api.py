@@ -18,11 +18,17 @@ class Query(graphene.ObjectType):
     def resolve_author_by_name(self, info, name):
         return AuthorServices.get_by_name(name=name)
 
-    author_by_uuid = graphene.Field(GenericType, name=graphene.UUID(required=True))
+    author_by_uuid = graphene.Field(GenericType, uuid=graphene.UUID(required=True))
 
     @staticmethod
     def resolve_author_by_uuid(self, info, uuid):
-        return AuthorServices.get_by_id(_id=uuid)
+        return AuthorServices.get_by_id(uid=uuid)
+
+    author_get_all = graphene.List(GenericType)
+
+    @staticmethod
+    def resolve_author_get_all(self, info):
+        return AuthorServices.get_all()
 
     # label
     label_by_name = graphene.Field(GenericType, name=graphene.String(required=True))
@@ -31,24 +37,17 @@ class Query(graphene.ObjectType):
     def resolve_label_by_name(self, info, name):
         return LabelServices.get_by_name(name=name)
 
-    label_by_uuid = graphene.Field(GenericType, name=graphene.UUID(required=True))
+    label_by_uuid = graphene.Field(GenericType, uuid=graphene.UUID(required=True))
 
     @staticmethod
     def resolve_label_by_uuid(self, info, uuid):
-        return LabelServices.get_by_id(_id=uuid)
+        return LabelServices.get_by_id(uid=uuid)
 
-    # # topic
-    # topic_by_name = graphene.Field(GenericType, name=graphene.String(required=True))
-    #
-    # @staticmethod
-    # def resolve_topic_by_name(self, info, name):
-    #     return LabelServices.get_by_name(name=name)
-    #
-    # topic_by_uuid = graphene.Field(GenericType, name=graphene.UUID(required=True))
-    #
-    # @staticmethod
-    # def resolve_topic_by_uuid(self, info, uuid):
-    #     return TopicServices.get_by_id(_id=uuid)
+    label_get_all = graphene.List(GenericType)
+
+    @staticmethod
+    def resolve_label_get_all(self, info):
+        return LabelServices.get_all()
 
     # publisher
     publisher_by_name = graphene.Field(GenericType, name=graphene.String(required=True))
@@ -61,4 +60,10 @@ class Query(graphene.ObjectType):
 
     @staticmethod
     def resolve_publisher_by_uuid(self, info, publisher_uuid):
-        return PublisherServices.get_by_id(_id=publisher_uuid)
+        return PublisherServices.get_by_id(uid=publisher_uuid)
+
+    publisher_get_all = graphene.List(GenericType)
+
+    @staticmethod
+    def resolve_publisher_get_all(self, info):
+        return PublisherServices.get_all()

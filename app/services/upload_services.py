@@ -16,8 +16,13 @@ def upload(info,
            category: str,
            authors_name: str,
            publishers: str,
-           labels: str
+           labels: str,
+           file
            ) -> Upload:
+    file_name = str(uuid.uuid4())
+    with open(file_name, 'wb') as f:
+        for line in file:
+            f.write(line)
     user = UserServices.user_get(info=info)
     document = DocumentServices.document_create(
         title=title,
@@ -27,19 +32,19 @@ def upload(info,
         category=category,
         uploader=user.username)
     if publishers is not None:
-        for p_name in publishers.split(','):
+        for p_name in set((_.strip() for _ in publishers.split(','))):
             p = PublisherServices.get_or_create(name=p_name)
             DocumentPublisherMap.dp_create(
                 document_uuid=document.document_uuid,
                 publisher_uuid=p.id)
     if authors_name is not None:
-        for a_name in authors_name.split(','):
+        for a_name in set((_.strip() for _ in authors_name.split(','))):
             a = AuthorServices.get_or_create(name=a_name)
             DocumentAuthorMap.da_create(
                 document_uuid=document.document_uuid,
                 author_uuid=a.id)
     if labels is not None:
-        for lb_name in labels.split(','):
+        for lb_name in set((_.strip() for _ in labels.split(','))):
             lb = LabelServices.get_or_create(name=lb_name)
             LabelDocumentMap.ld_create(
                 document_uuid=document.document_uuid,

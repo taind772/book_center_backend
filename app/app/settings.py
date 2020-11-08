@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    # 'django.contrib.sessions',
     # 'django.contrib.messages',
     'django.contrib.staticfiles',
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_mysql',
     'graphene_django',
     'corsheaders',
+    'graphene_file_upload',
 
     # own apps
     'document',
@@ -203,7 +204,7 @@ GRAPHENE = {
 
 AUTH_USER_MODEL = 'user.User'
 
-CONN_MAX_AGE = None
+# CONN_MAX_AGE = None
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',

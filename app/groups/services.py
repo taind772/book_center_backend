@@ -9,9 +9,9 @@ class BaseServices:
     def get_by_name(cls, name: str):
         return cls.obj.objects.get(name=name)
 
-    @staticmethod
-    def get_by_id(cls, _id: uuid.UUID):
-        return cls.obj.objects.get(id=_id)
+    @classmethod
+    def get_by_id(cls, uid: uuid.UUID):
+        return cls.obj.objects.get(id=uid)
 
     @classmethod
     def create(cls, name: str):

@@ -4,7 +4,7 @@ from django.db import models
 
 
 class AbstractGroup(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), null=False, blank=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now_add=True)
@@ -17,7 +17,8 @@ class AbstractGroup(models.Model):
 
     @classmethod
     def normalize_name(cls, name: str):
-        cls.name = unicodedata.normalize('NFKC', name.strip())
+        name = unicodedata.normalize('NFKC', name.strip())
+        return name
 
 
 class Author(AbstractGroup):

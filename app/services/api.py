@@ -1,4 +1,5 @@
 import graphene
+from graphene_file_upload.scalars import Upload as Input
 from document.api import DocumentType
 from user.api import UserType
 
@@ -6,16 +7,18 @@ from . import bookmark_services as BookmarkServices
 from . import upload_services as UploadServices
 from . import rate_services as RateServices
 
-from user import services as UserServices
-
 
 class RateType(graphene.ObjectType):
     rate_value = graphene.Int()
-    document_uuid = graphene.UUID()
-    username = graphene.String()
+    comment = graphene.String()
+    user = graphene.Field(UserType)
+    document = graphene.Field(DocumentType)
 
     def resolve_username(self, info):
-        return UserServices.user_by_uuid(user_uuid=self.user_uuid).username
+        return RateServices.rate_get_user(self)
+
+    def resolve_document(self, info):
+        return RateServices.rate_get_document(self)
 
 
 class Query(graphene.ObjectType):
@@ -93,9 +96,9 @@ class UploadDocument(graphene.Mutation):
         language = graphene.String(required=True)
         category = graphene.String(required=True)
         authors_name = graphene.String()
-        publisher = graphene.String()
-        topics = graphene.String()
+        publishers = graphene.String()
         labels = graphene.String()
+        file = Input(required=True)
 
     ok = graphene.Boolean()
 
@@ -104,11 +107,11 @@ class UploadDocument(graphene.Mutation):
                title,
                category,
                language,
+               file,
                description=None,
                release_year=None,
                authors_name=None,
-               publisher=None,
-               topics=None,
+               publishers=None,
                labels=None):
         upload = UploadServices.upload(
             info=info,
@@ -118,9 +121,9 @@ class UploadDocument(graphene.Mutation):
             description=description,
             release_year=release_year,
             authors_name=authors_name,
-            publisher=publisher,
-            topics=topics,
-            labels=labels)
+            publishers=publishers,
+            labels=labels,
+            file=file)
         ok = upload is not None
         return UploadDocument(ok=ok)
 

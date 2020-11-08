@@ -3,7 +3,7 @@ from django.db import models
 from .validators import validate_year
 
 
-LANG_CHOICES = [(_, _) for _ in ('vietnamese', 'english', 'other')]
+LANG_CHOICES = [(_, _) for _ in ('Vietnamese', 'English', 'Other')]
 CATEGORY_CHOICES = [(_, _) for _ in ('book', 'article', 'slide', 'test')]
 
 

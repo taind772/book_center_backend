@@ -25,7 +25,7 @@ class DocumentAuthor(AbstractPair):
 
     @classmethod
     def document_author_create(cls, document_uuid: uuid.UUID, author_uuid: uuid.UUID):
-        return cls.objects.create(first_uuid=document_uuid, second_uuid=author_uuid)
+        return cls.objects.get_or_create(first_uuid=document_uuid, second_uuid=author_uuid)
 
 
 class DocumentPublisher(AbstractPair):
@@ -43,7 +43,7 @@ class DocumentPublisher(AbstractPair):
 
     @classmethod
     def document_publisher_create(cls, document_uuid: uuid.UUID, publisher_uuid: uuid.UUID):
-        return cls.objects.create(first_uuid=document_uuid, second_uuid=publisher_uuid)
+        return cls.objects.get_or_create(first_uuid=document_uuid, second_uuid=publisher_uuid)
 
 
 class LabelDocument(AbstractPair):
@@ -61,7 +61,7 @@ class LabelDocument(AbstractPair):
 
     @classmethod
     def label_document_create(cls, document_uuid: uuid.UUID, label_uuid: uuid.UUID):
-        return cls.objects.create(first_uuid=label_uuid, second_uuid=document_uuid)
+        return cls.objects.get_or_create(first_uuid=label_uuid, second_uuid=document_uuid)
 
 
 # class LabelTopic(AbstractPair):

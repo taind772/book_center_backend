@@ -1,5 +1,6 @@
 from .models import Rate
 from user import services as UserServices
+from document import services as DocumentServices
 
 
 def rate_get(info) -> Rate:
@@ -25,3 +26,11 @@ def rate_delete(info, document_uuid):
     rate = Rate.objects.get(user_uuid=user.user_uuid, document_uuid=document_uuid)
     rate.delete()
     return rate
+
+
+def rate_get_user(rate):
+    return UserServices.user_by_uuid(rate.user_uuid)
+
+
+def rate_get_document(rate):
+    return DocumentServices.document_by_uuid(rate.document_uuid)
