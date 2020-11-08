@@ -1,0 +1,8 @@
+client_config_backend: settings
+client_config:
+  client_id: 600392797421-hneigm02tdfq8mqj0ape7hitm3ie5ln6.apps.googleusercontent.com
+  client_secret: UQUG0JFMdpa76eb5Pw8L5XdH
+save_credentials: True
+save_credentials_backend: file
+save_credentials_file: services/drive_config/credentials.json
+get_refresh_token: True

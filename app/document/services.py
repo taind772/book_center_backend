@@ -2,20 +2,17 @@ import uuid
 from .models import Document
 
 
-def document_create(
-		title: str,
-		description: str,
-		release_year: int,
-		language: str,
-		category: str,
-		uploader: str):
+def document_create(uid: uuid.UUID, title: str, description: str, release_year: int, language: str,
+                    category: str, uploader: str, path_to_file: str):
 	return Document.objects.create(
+		document_uuid=uid,
 		title=title,
 		description=description,
 		release_year=release_year,
 		language=language,
 		category=category,
-		upload_by=uploader)
+		upload_by=uploader,
+		path_to_file=path_to_file)
 
 
 def document_by_uuid(document_uuid: uuid.UUID) -> Document:

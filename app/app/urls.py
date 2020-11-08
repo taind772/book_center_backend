@@ -13,8 +13,9 @@ Including another URL conf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.urls import path
-from graphene_django.views import GraphQLView
+# from graphene_django.views import GraphQLView
 from graphene_file_upload.django import FileUploadGraphQLView
 from django.views.decorators.csrf import csrf_exempt
 from graphql_jwt.decorators import jwt_cookie
@@ -23,3 +24,11 @@ from graphql_jwt.decorators import jwt_cookie
 urlpatterns = [
     path("graphql", csrf_exempt(jwt_cookie(FileUploadGraphQLView.as_view(graphiql=True)))),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    from django.conf.urls import url
+    from django.urls import include
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,16 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    # 'debug_toolbar',
     # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    # 'django.contrib.sessions',
-    # 'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
 
     # third party apps
@@ -61,11 +58,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -88,33 +84,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-# DATABASES = {
-#     # 'default': {
-#     #     'ENGINE': 'django.db.backends.sqlite3',
-#     #     'NAME': 'inner.db',
-#     # },
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.environ.get('MYSQL_DATABASE'),
-#         'USER': os.environ.get('MYSQL_USER'),
-#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-#         'HOST': os.environ.get('MYSQL_HOST'),
-#         'PORT': os.environ.get('MYSQL_FORWARD_PORT'),
-#         'OPTIONS': {
-#             # Tell MySQLdb to connect with 'utf8mb4' character set
-#             'charset': 'utf8mb4',
-#         },
-#         # Tell Django to build the test database with the 'utf8mb4' character set
-#         'TEST': {
-#             'CHARSET': 'utf8mb4',
-#             'COLLATION': 'utf8mb4_unicode_ci',
-#         }
-#     }
-# }
 
 # DATABASE_ROUTERS=['app.db_router.Router']
 
@@ -141,19 +112,8 @@ if os.environ.get('ENV') == 'docker':
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'test-db',
-            'USER': 'djangoTest',
-            'PASSWORD': 'testpw',
-            'OPTIONS': {
-                # Tell MySQLdb to connect with 'utf8mb4' character set
-                'charset': 'utf8mb4',
-            },
-            # Tell Django to build the test database with the 'utf8mb4' character set
-            'TEST': {
-                'CHARSET': 'utf8mb4',
-                'COLLATION': 'utf8mb4_unicode_ci',
-            }
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'inner.db',
         }
     }
 
@@ -175,7 +135,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -188,7 +147,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -204,7 +162,7 @@ GRAPHENE = {
 
 AUTH_USER_MODEL = 'user.User'
 
-# CONN_MAX_AGE = None
+CONN_MAX_AGE = None
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
@@ -213,5 +171,22 @@ AUTHENTICATION_BACKENDS = [
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar', ]
+
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+
+    INTERNAL_IPS = [
+        '0.0.0.0',
+        '127.0.0.1',
+        "10.0.2.2"
+    ]
+
+    if os.environ.get('ENV') == 'docker':
+        import socket
+
+        hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+        INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]

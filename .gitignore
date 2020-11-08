@@ -3,6 +3,8 @@
 
 /mysql/database/*
 
+credentials.json
+
 __pycache__
 *.pyc
 *.db
