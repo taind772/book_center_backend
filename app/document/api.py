@@ -11,6 +11,8 @@ class DocumentType(graphene.ObjectType):
     category = graphene.String()
     last_update = graphene.DateTime()
     upload_by = graphene.String()
+    cover_url = graphene.String()
+    path_to_file = graphene.String()
 
 
 class Query(graphene.ObjectType):
@@ -22,17 +24,17 @@ class Query(graphene.ObjectType):
         return DocumentServices.document_by_uuid(document_uuid=uuid)
 
     #
-    document_filter = graphene.List(
-        DocumentType,
-        title=graphene.String(),
-        release_year=graphene.Int(),
-        language=graphene.String(),
-        category=graphene.String())
-
-    @staticmethod
-    def resolve_document_filter(self, info, title=None, release_year=None, language=None, category=None):
-        return DocumentServices.document_filter(
-            title=title,
-            release_year=release_year,
-            language=language,
-            category=category)
+    # document_filter = graphene.List(
+    #     DocumentType,
+    #     title=graphene.String(),
+    #     release_year=graphene.Int(),
+    #     language=graphene.String(),
+    #     category=graphene.String())
+    #
+    # @staticmethod
+    # def resolve_document_filter(self, info, title=None, release_year=None, language=None, category=None):
+    #     return DocumentServices.document_filter(
+    #         title=title,
+    #         release_year=release_year,
+    #         language=language,
+    #         category=category)

@@ -1,5 +1,5 @@
 import uuid
-from .models import AbstractGroup, Author, Label, Publisher
+from .models import AbstractGroup, Author, Label, Publisher, models
 
 
 class BaseServices:
@@ -19,15 +19,15 @@ class BaseServices:
         return cls.obj.objects.create(name=name)
 
     @classmethod
-    def get_all(cls, uuid_list=None):
+    def get_all(cls, uuid_list=None) -> models.QuerySet:
         if uuid_list is None:
             return cls.obj.objects.all()
-        return cls.obj.objects.filter(uuid__in=uuid_list)
+        return cls.obj.objects.filter(id__in=uuid_list)
 
     @classmethod
-    def get_or_create(cls, name: str, description=None):
+    def get_or_create(cls, name: str):
         name = cls.obj.normalize_name(name=name)
-        res, _ = cls.obj.objects.get_or_create(name=name, description=description)
+        res, _ = cls.obj.objects.get_or_create(name=name)
         return res
 
 

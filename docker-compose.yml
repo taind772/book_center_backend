@@ -29,7 +29,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_INITDB_SKIP_TZINFO: 1
     volumes: 
-      # - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/init:/docker-entrypoint-initdb.d
       - ./mysql/database:/var/lib/mysql
     ports: 
       - "${MYSQL_HOST_PORT}:${MYSQL_FORWARD_PORT}"

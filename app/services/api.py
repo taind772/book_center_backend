@@ -3,9 +3,10 @@ from graphene_file_upload.scalars import Upload as Input
 from document.api import DocumentType
 from user.api import UserType
 
-from . import bookmark_services as BookmarkServices
-from . import upload_services as UploadServices
-from . import rate_services as RateServices
+from . import services_bookmark as BookmarkServices
+from . import services_upload as UploadServices
+from . import services_rate as RateServices
+from . import services_search as SearchServices
 
 
 class RateType(graphene.ObjectType):
@@ -21,7 +22,41 @@ class RateType(graphene.ObjectType):
         return RateServices.rate_get_document(self)
 
 
-class Query(graphene.ObjectType):
+class SearchResponse(graphene.ObjectType):
+    has_next = graphene.Boolean()
+    documents = graphene.List(DocumentType)
+
+
+class Search(graphene.ObjectType):
+    search_by_document_title = graphene.Field(SearchResponse,title=graphene.String(required=True),
+                                             first=graphene.Int(), limit=graphene.Int())
+
+    @staticmethod
+    def resolve_search_by_document_title(self, info, title, **kwargs):
+        return SearchServices.search_document_by_title(title=title, **kwargs)
+
+    filter_document_by_year = graphene.Field(SearchResponse, year=graphene.Int(required=True),
+                                             first=graphene.Int(), limit=graphene.Int())
+
+    @staticmethod
+    def resolve_filter_document_by_year(self, info, year, **kwargs):
+        return SearchServices.search_document_by_year(year=year, **kwargs)
+
+    filter_document_by_language = graphene.Field(SearchResponse, language=graphene.String(required=True),
+                                                 first=graphene.Int(), limit=graphene.Int())
+    @staticmethod
+    def resolve_filter_document_by_language(self, info, language, **kwargs):
+        return SearchServices.search_document_by_language(language=language, **kwargs)
+
+    document_filter = graphene.Field(SearchResponse, title=graphene.String(),
+                                     year=graphene.Int(), language=graphene.String(),
+                                     first=graphene.Int(), limit=graphene.Int())
+    @staticmethod
+    def resolve_document_filter(self, info, **kwargs):
+        return SearchServices.document_filter(**kwargs)
+
+
+class Query(Search, graphene.ObjectType):
     # bookmark
     bookmark_get = graphene.List(DocumentType)
 
@@ -99,20 +134,15 @@ class UploadDocument(graphene.Mutation):
         publishers = graphene.String()
         labels = graphene.String()
         file = Input(required=True)
+        cover_url = graphene.String()
 
     ok = graphene.Boolean()
 
     @staticmethod
-    def mutate(self, info,
-               title,
-               category,
-               language,
-               file,
-               description=None,
-               release_year=None,
-               authors_name=None,
-               publishers=None,
-               labels=None):
+    def mutate(self, info, title, category, language, file,
+               description=None, release_year=None,
+               authors_name=None, publishers=None,
+               labels=None, cover_url=None):
         upload = UploadServices.upload(
             info=info,
             title=title,
@@ -123,7 +153,8 @@ class UploadDocument(graphene.Mutation):
             authors_name=authors_name,
             publishers=publishers,
             labels=labels,
-            file=file)
+            file=file,
+            cover_url=cover_url)
         ok = upload is not None
         return UploadDocument(ok=ok)
 

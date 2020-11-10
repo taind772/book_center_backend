@@ -3,8 +3,8 @@ from django.db import models
 
 
 class AbstractPair(models.Model):
-    first_uuid = models.UUIDField(null=False, blank=False)
-    second_uuid = models.UUIDField(null=False, blank=False)
+    document_uuid = models.UUIDField(null=False, blank=False)
+    group_uuid = models.UUIDField(null=False, blank=False)
 
     class Meta:
         abstract = True
@@ -14,54 +14,46 @@ class DocumentAuthor(AbstractPair):
     class Meta:
         db_table = 'document_author'
         constraints = [
-            models.UniqueConstraint(fields=['first_uuid', 'second_uuid'], name='authors_of_documents')
+            models.UniqueConstraint(fields=['document_uuid', 'group_uuid'], name='document_author')
         ]
 
-    def document_uuid(self):
-        return self.first_uuid
-
     def author_uuid(self):
-        return self.second_uuid
+        return self.group_uuid
 
     @classmethod
     def document_author_create(cls, document_uuid: uuid.UUID, author_uuid: uuid.UUID):
-        return cls.objects.get_or_create(first_uuid=document_uuid, second_uuid=author_uuid)
+        return cls.objects.get_or_create(document_uuid=document_uuid, group_uuid=author_uuid)
 
 
 class DocumentPublisher(AbstractPair):
     class Meta:
         db_table = 'document_publisher'
         constraints = [
-            models.UniqueConstraint(fields=['first_uuid', 'second_uuid'], name='documents_of_publisher')
+            models.UniqueConstraint(fields=['document_uuid', 'group_uuid'], name='document_publisher')
         ]
 
-    def document_uuid(self):
-        return self.first_uuid
-
+    @property
     def publisher_uuid(self):
-        return self.second_uuid
+        return self.group_uuid
 
     @classmethod
     def document_publisher_create(cls, document_uuid: uuid.UUID, publisher_uuid: uuid.UUID):
-        return cls.objects.get_or_create(first_uuid=document_uuid, second_uuid=publisher_uuid)
+        return cls.objects.get_or_create(document_uuid=document_uuid, group_uuid=publisher_uuid)
 
 
-class LabelDocument(AbstractPair):
+class DocumentLabel(AbstractPair):
     class Meta:
         db_table = 'document_label'
         constraints = [
-            models.UniqueConstraint(fields=['first_uuid', 'second_uuid'], name='label_of_document')
+            models.UniqueConstraint(fields=['document_uuid', 'group_uuid'], name='document_label')
         ]
 
     def label_uuid(self):
-        return self.first_uuid
-
-    def document_uuid(self):
-        return self.second_uuid
+        return self.group_uuid
 
     @classmethod
     def label_document_create(cls, document_uuid: uuid.UUID, label_uuid: uuid.UUID):
-        return cls.objects.get_or_create(first_uuid=label_uuid, second_uuid=document_uuid)
+        return cls.objects.get_or_create(document_uuid=document_uuid, group_uuid=label_uuid)
 
 
 # class LabelTopic(AbstractPair):

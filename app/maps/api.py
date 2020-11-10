@@ -1,7 +1,7 @@
 import graphene
 
 from document.api import DocumentType
-from .services import DocumentAuthorMap, DocumentPublisherMap, LabelDocumentMap
+from .services import DocumentAuthorMap, DocumentPublisherMap, DocumentLabelMap
 from groups.api import GenericType
 
 
@@ -37,10 +37,10 @@ class Query(graphene.ObjectType):
 
     @staticmethod
     def resolve_label_get_documents(self, info, label_uuid):
-        return LabelDocumentMap.ld_get_documents(label_uuid=label_uuid)
+        return DocumentLabelMap.dl_get_documents(label_uuid=label_uuid)
 
     document_get_labels = graphene.List(GenericType, document_uuid=graphene.UUID())
 
     @staticmethod
     def resolve_document_get_labels(self, info, document_uuid):
-        return LabelDocumentMap.ld_get_labels(document_uuid=document_uuid)
+        return DocumentLabelMap.dl_get_labels(document_uuid=document_uuid)

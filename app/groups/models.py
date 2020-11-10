@@ -6,7 +6,6 @@ from django.db import models
 class AbstractGroup(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=255, unique=True, null=False, blank=False)
-    description = models.TextField(null=True, blank=True)
     last_update = models.DateTimeField(auto_now_add=True)
 
     class Meta:

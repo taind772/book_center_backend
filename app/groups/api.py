@@ -6,7 +6,6 @@ from .services import AuthorServices, LabelServices, PublisherServices
 class GenericType(graphene.ObjectType):
     id = graphene.UUID()
     name = graphene.String()
-    description = graphene.String()
     last_update = graphene.DateTime()
 
 
