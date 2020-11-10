@@ -49,7 +49,7 @@ class Search(graphene.ObjectType):
         return SearchServices.search_document_by_language(language=language, **kwargs)
 
     document_filter = graphene.Field(SearchResponse, title=graphene.String(),
-                                     year=graphene.Int(), language=graphene.String(), categoty=graphene.String(),
+                                     year=graphene.Int(), language=graphene.String(), category=graphene.String(),
                                      first=graphene.Int(), limit=graphene.Int())
     @staticmethod
     def resolve_document_filter(self, info, **kwargs):
