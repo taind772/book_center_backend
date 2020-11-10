@@ -1,4 +1,5 @@
 from .models import Rate
+from django.db.models import Avg
 from user import services as UserServices
 from document import services as DocumentServices
 
@@ -34,3 +35,11 @@ def rate_get_user(rate):
 
 def rate_get_document(rate):
     return DocumentServices.document_by_uuid(rate.document_uuid)
+
+
+def rate_get_average(document_uuid):
+    rates = Rate.objects.filter(document_uuid=document_uuid)
+    try:
+        return rates.aggregate(Avg('rate_value'))
+    except Rate.DoesNotExist:
+        return 0

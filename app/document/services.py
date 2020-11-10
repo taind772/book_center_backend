@@ -48,4 +48,4 @@ def document_filter(title, year, language, category):
         documents = documents.filter(language=language)
     if category is not None:
         documents = documents.filter(category=category)
-    return documents
+    return documents.all()

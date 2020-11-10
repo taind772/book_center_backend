@@ -96,6 +96,12 @@ class Query(Search, graphene.ObjectType):
     def resolve_rate_get_all(self, info, document_uuid):
         return RateServices.rate_get_all(document_uuid=document_uuid)
 
+    rate_get_average = graphene.Float(document_uuid=graphene.UUID())
+
+    @staticmethod
+    def resolve_rate_get_average(self, info, document_uuid):
+        return RateServices.rate_get_average(document_uuid=document_uuid)
+
 
 class BookmarkAdd(graphene.Mutation):
     class Arguments:
