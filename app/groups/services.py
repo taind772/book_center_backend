@@ -19,7 +19,7 @@ class BaseServices:
         return cls.obj.objects.create(name=name)
 
     @classmethod
-    def get_all(cls, uuid_list=None) -> models.QuerySet:
+    def get_all(cls, uuid_list=None):
         if uuid_list is None:
             return cls.obj.objects.all()
         return cls.obj.objects.filter(id__in=uuid_list)

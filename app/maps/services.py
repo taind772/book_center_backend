@@ -45,7 +45,7 @@ class DocumentPublisherMap:
     @staticmethod
     def dp_get_documents(publisher_uuid: uuid.UUID):
         document_uuid_list = DocumentPublisher.objects.filter(group_uuid=publisher_uuid)\
-            .values_list('first_uuid', flat=True)
+            .values_list('document_uuid', flat=True)
         return DocumentServices.document_get_all(document_uuid_list=document_uuid_list)
 
     @staticmethod
