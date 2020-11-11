@@ -42,6 +42,7 @@ class User(AbstractBaseUser):
     join_date = models.DateField(auto_now=True)
 
     class Meta:
+        managed = False
         db_table = 'user'
 
     objects = UserManager()

@@ -7,6 +7,7 @@ class Bookmark(models.Model):
     create_time = models.DateTimeField(auto_now=True)
 
     class Meta:
+        managed = False
         db_table = 'bookmarks'
         constraints = [
             models.UniqueConstraint(fields=['user_uuid', 'document_uuid'], name='bookmark')
@@ -19,6 +20,7 @@ class Upload(models.Model):
     upload_time = models.DateTimeField(auto_now=True)
 
     class Meta:
+        managed = False
         db_table = 'uploads'
 
 
@@ -30,6 +32,7 @@ class Rate(models.Model):
     last_update = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        managed = False
         db_table = 'rates'
         constraints = [
             models.UniqueConstraint(fields=['user_uuid', 'document_uuid'], name='rate')

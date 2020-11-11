@@ -23,6 +23,7 @@ class AbstractGroup(models.Model):
 class Author(AbstractGroup):
 
     class Meta:
+        managed = False
         db_table = 'author'
 
 
@@ -35,10 +36,12 @@ class Author(AbstractGroup):
 class Label(AbstractGroup):
 
     class Meta:
+        managed = False
         db_table = 'label'
 
 
 class Publisher(AbstractGroup):
 
     class Meta:
+        managed = False
         db_table = 'publisher'

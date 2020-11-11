@@ -12,6 +12,7 @@ class AbstractPair(models.Model):
 
 class DocumentAuthor(AbstractPair):
     class Meta:
+        managed = False
         db_table = 'document_author'
         constraints = [
             models.UniqueConstraint(fields=['document_uuid', 'group_uuid'], name='document_author')
@@ -27,6 +28,7 @@ class DocumentAuthor(AbstractPair):
 
 class DocumentPublisher(AbstractPair):
     class Meta:
+        managed = False
         db_table = 'document_publisher'
         constraints = [
             models.UniqueConstraint(fields=['document_uuid', 'group_uuid'], name='document_publisher')
@@ -43,6 +45,7 @@ class DocumentPublisher(AbstractPair):
 
 class DocumentLabel(AbstractPair):
     class Meta:
+        managed = False
         db_table = 'document_label'
         constraints = [
             models.UniqueConstraint(fields=['document_uuid', 'group_uuid'], name='document_label')
